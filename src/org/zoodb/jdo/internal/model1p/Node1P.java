@@ -71,8 +71,8 @@ public class Node1P extends Node {
 		Collection<ZooClassDef> defs = disk.readSchemaAll();
 		for (ZooClassDef def: defs) {
 			def.associateJavaTypes();
-			if (def.getJavaClass()==ZooClassDef.class) {
-				def.initProvidedContext(null, commonCache.getSession(), this);
+			if (def.getClassName().equals(ZooClassDef.class.getName())) {
+				def.initProvidedContext(commonCache.getSession(), this);
 				commonCache.setRootSchema(def);
 			}
 		}

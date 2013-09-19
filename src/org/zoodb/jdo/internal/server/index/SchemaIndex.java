@@ -539,16 +539,18 @@ public class SchemaIndex implements CallbackPageRead, CallbackPageWrite {
 		}
 
 		//build proxy structure
-		for (ZooClassDef def: ret.values()) {
-			if (def.getVersionProxy() == null) {
-				ZooClassDef latest = def;
-				while (latest.getNextVersion() != null) {
-					latest = latest.getNextVersion();
-				}
-				//this associates proxies to super-classes and previous versions recursively
-				latest.associateProxy( new ZooClassProxy(latest, node.getSession()) );
-			}
-		}
+		//TODO remove me
+//		for (ZooClassDef def: ret.values()) {
+//			if (def.getVersionProxy() == null) {
+//				ZooClassDef latest = def;
+//				while (latest.getNextVersion() != null) {
+//					latest = latest.getNextVersion();
+//				}
+//				//this associates proxies to super-classes and previous versions recursively
+//				latest.associateProxy( new ZooClassProxy(latest, node.getSession()) );
+//			}
+//		}
+		
 		
 		return ret.values();
 	}

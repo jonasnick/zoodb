@@ -53,6 +53,7 @@ public class ClientSessionCache implements AbstractCache {
 	private final PrimLongMapLI<ZooClassDef> schemata = 
 		new PrimLongMapLI<ZooClassDef>();
 	//TODO move into node-cache
+	//TODO use ObjectIdentityHashMap for Nodes and Classes?!?!?
 	private final HashMap<Node, HashMap<Class<?>, ZooClassDef>> nodeSchemata = 
 		new HashMap<Node, HashMap<Class<?>, ZooClassDef>>();
 	
@@ -77,11 +78,11 @@ public class ClientSessionCache implements AbstractCache {
 	public ClientSessionCache(Session session) {
 		this.session = session;
 		ZooClassDef zpc = ZooClassDef.bootstrapZooPCImpl();
-		metaSchema = ZooClassDef.bootstrapZooClassDef();
+		zpc.initProvidedContext(session, session.getPrimaryNode());
+		metaSchema = ZooClassDef.bootstrapZooClassDef(zpc);
 		metaSchema.associateFields();
 		metaSchema.associateJavaTypes();
-		metaSchema.initProvidedContext(ObjectState.PERSISTENT_CLEAN, session, 
-				session.getPrimaryNode());
+		metaSchema.initProvidedContext(session, session.getPrimaryNode());
 		schemata.put(zpc.getOid(), zpc);
 		schemata.put(metaSchema.getOid(), metaSchema);
 	}
@@ -114,7 +115,9 @@ public class ClientSessionCache implements AbstractCache {
         }
         for (ZooClassDef cs: schemaToRemove) {
             schemata.remove(cs.jdoZooGetOid());
-            nodeSchemata.get(cs.jdoZooGetNode()).remove(cs.getJavaClass());
+            if (cs.hasJavaClass()) {
+            	nodeSchemata.get(cs.jdoZooGetNode()).remove(cs.getJavaClass());
+            }
         }
         for (ZooClassDef cs: schemaToRefresh) {
             session.getSchemaManager().refreshSchema(cs);
@@ -301,7 +304,9 @@ public class ClientSessionCache implements AbstractCache {
 			ZooClassDef cs = iterS.next();
 			if (cs.jdoZooIsDeleted()) {
 				iterS.remove();
-        		nodeSchemata.get(cs.jdoZooGetNode()).remove(cs.getJavaClass());
+				if (cs.hasJavaClass()) {
+					nodeSchemata.get(cs.jdoZooGetNode()).remove(cs.getJavaClass());
+				}
 				continue;
 			}
 			//keep in cache???
@@ -325,20 +330,20 @@ public class ClientSessionCache implements AbstractCache {
 		}
 		//TODO avoid setting the OID here a second time, seems silly...
     	clsDef.jdoZooInit(state, metaSchema.getProvidedContext(), clsDef.getOid());
-		clsDef.initProvidedContext(state, session, node);
+		clsDef.initProvidedContext(session, node);
 		schemata.put(clsDef.getOid(), clsDef);
-		if (clsDef.getNextVersion() == null && clsDef.getJavaClass() != null) {
+		if (clsDef.getNextVersion() == null && clsDef.hasJavaClass()) {
 			nodeSchemata.get(node).put(clsDef.getJavaClass(), clsDef);
 		}
 		objs.put(clsDef.getOid(), clsDef);
 	}
 	
-	public void updateSchema(ZooClassDef clsDef, Class<?> oldCls, Class<?> newCls) {
-		Node node = clsDef.jdoZooGetNode();
+	public void updateSchema(ZooClassDef newClsDef, Class<?> oldCls) {
+		Node node = newClsDef.jdoZooGetNode();
 		//Removal may return null if class was previously stored a 'null', which is non-unique.
 		nodeSchemata.get(node).remove(oldCls);
-		if (newCls != null) {
-			nodeSchemata.get(node).put(newCls, clsDef);
+		if (newClsDef.hasJavaClass()) {
+			nodeSchemata.get(node).put(newClsDef.getJavaClass(), newClsDef);
 		}
 	}
 

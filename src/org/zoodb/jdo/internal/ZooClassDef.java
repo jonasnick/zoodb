@@ -37,6 +37,7 @@ import org.zoodb.jdo.internal.ZooFieldDef.JdoType;
 import org.zoodb.jdo.internal.client.PCContext;
 import org.zoodb.jdo.internal.client.SchemaOperation;
 import org.zoodb.jdo.internal.client.session.ClientSessionCache;
+import org.zoodb.jdo.internal.util.DBLogger;
 import org.zoodb.jdo.internal.util.Util;
 
 /**
@@ -112,9 +113,10 @@ public class ZooClassDef extends ZooPCImpl {
 	
 	/**
 	 * Methods used for bootstrapping the schema of newly created databases.
+	 * @param zpc 
 	 * @return Meta schema instance
 	 */
-	public static ZooClassDef bootstrapZooClassDef() {
+	public static ZooClassDef bootstrapZooClassDef(ZooClassDef zpc) {
 		ZooClassDef meta = new ZooClassDef(ZooClassDef.class.getName(), 51, 50, 51, 0);
 		ArrayList<ZooFieldDef> fields = new ArrayList<ZooFieldDef>();
 		fields.add(new ZooFieldDef(meta, "className", String.class.getName(), 0, 
@@ -133,8 +135,10 @@ public class ZooClassDef extends ZooPCImpl {
 				JdoType.SCO, 76));
 		//new ZooFieldDef(this, allFields, ZooFieldDef[].class.getName(), typeOid, JdoType.ARRAY);
 		meta.registerFields(fields);
-		meta.cls = ZooClassDef.class;
+		//TODO remove me
+		//meta.cls = ZooClassDef.class;
 		meta.className = ZooClassDef.class.getName();
+		meta.superDef = zpc;
 		return meta;
 	}
 	
@@ -247,7 +251,7 @@ public class ZooClassDef extends ZooPCImpl {
 
 		//caches
 		newDef.jdoZooMarkDeleted();
-		cache.updateSchema(this, newDef.getJavaClass(), this.getJavaClass());
+		cache.updateSchema(this, newDef.hasJavaClass() ? newDef.getJavaClass() : null);
 		
 		//versions
 		nextVersion = null;
@@ -315,7 +319,7 @@ public class ZooClassDef extends ZooPCImpl {
 		return def;
 	}
 	
-	public void initProvidedContext(ObjectState state, Session session, Node node) {
+	public void initProvidedContext(Session session, Node node) {
 		if (providedContext != null) {
 			if (!className.equals(ZooClassDef.class.getName())) {
 				throw new IllegalStateException(className);
@@ -324,7 +328,7 @@ public class ZooClassDef extends ZooPCImpl {
 				return;
 			}
 		}
-		providedContext =  new PCContext(this, session, node);
+		providedContext = new PCContext(this, session, node);
 	}
 	
 	/**
@@ -376,10 +380,21 @@ public class ZooClassDef extends ZooPCImpl {
 	}
 	
 	public Class<?> getJavaClass() {
+		if (cls == null) {
+			associateJavaTypesInternal();
+			if (cls == null) {
+				DBLogger.newUser("Schema not compatible with Java class: " + className);
+			}
+		}
 		return cls;
 	}
 
 	public void associateJavaTypes() {
+		//associateJavaTypesInternal();
+	}
+	
+	
+	private void associateJavaTypesInternal() {
 		if (cls != null) {
 			if (!className.equals(ZooClassDef.class.getName()) && 
 					!className.equals(ZooPCImpl.class.getName())) {
@@ -433,8 +448,8 @@ public class ZooClassDef extends ZooPCImpl {
 		}
 		if (localFields.size() != n) {
 			cls = null;
-			throw new JDOUserException("Schema error, field count mismatch between Java class (" +
-					n + ") and database class (" + localFields.size() + ").");
+//			throw new JDOUserException("Schema error, field count mismatch between Java class (" +
+//					n + ") and database class (" + localFields.size() + ").");
 		}
 	}
 
@@ -447,6 +462,9 @@ public class ZooClassDef extends ZooPCImpl {
 	}
 
 	public ZooClassProxy getVersionProxy() {
+		if (versionProxy == null) {
+			versionProxy = new ZooClassProxy(this, providedContext.getSession());
+		}
 		return versionProxy;
 	}
 	
@@ -667,5 +685,9 @@ public class ZooClassDef extends ZooPCImpl {
 			return false;
 		}
 		return isSuperTypeOf(def.superDef);
+	}
+
+	public boolean hasJavaClass() {
+		return cls != null;
 	}
 }

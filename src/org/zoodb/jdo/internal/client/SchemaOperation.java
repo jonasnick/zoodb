@@ -194,9 +194,9 @@ public abstract class SchemaOperation {
 
 		@Override
 		void initial() {
-			Class<?> oldCls = def.getJavaClass();
+			Class<?> oldCls = def.hasJavaClass() ? def.getJavaClass() : null;
 			def.rename(newName);
-			cache.updateSchema(def, oldCls, def.getJavaClass());
+			cache.updateSchema(def, oldCls);
 		}
 
 		@Override
@@ -206,9 +206,9 @@ public abstract class SchemaOperation {
 
 		@Override
 		void rollback() {
-			Class<?> oldCls = def.getJavaClass();
+			Class<?> oldCls = def.hasJavaClass() ? def.getJavaClass() : null;
 			def.rename(oldName);
-			cache.updateSchema(def, oldCls, def.getJavaClass());
+			cache.updateSchema(def, oldCls);
 		}
 	}
 

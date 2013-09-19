@@ -314,7 +314,7 @@ public class DiskAccessOneFile implements DiskAccess {
 			
 			//This is the root schema
 			ZooClassDef zpcDef = ZooClassDef.bootstrapZooPCImpl(); 
-			ZooClassDef meta = ZooClassDef.bootstrapZooClassDef(); 
+			ZooClassDef meta = ZooClassDef.bootstrapZooClassDef(zpcDef); 
 			zpcDef.associateFields();
 			meta.associateFields();
 			meta.associateJavaTypes();

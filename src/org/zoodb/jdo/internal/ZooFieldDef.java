@@ -31,6 +31,7 @@ import javax.jdo.JDOUserException;
 import org.zoodb.api.impl.ZooPCImpl;
 import org.zoodb.jdo.internal.SerializerTools.PRIMITIVE;
 import org.zoodb.jdo.internal.server.index.BitTools;
+import org.zoodb.jdo.internal.util.DBLogger;
 
 public class ZooFieldDef {
 
@@ -332,10 +333,18 @@ public class ZooFieldDef {
     }
 
 	public Class<?> getJavaType() {
+		if (javaField == null) {
+			//TODO call more appropriate fnction?
+			declaringType.getJavaClass();
+		}
 		return javaTypeDef;
 	}
 
 	public Field getJavaField() {
+		if (javaField == null) {
+			//TODO call more appropriate fnction?
+			declaringType.getJavaClass();
+		}
 		return javaField;
 	}
 

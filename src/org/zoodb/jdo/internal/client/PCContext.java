@@ -61,7 +61,8 @@ public final class PCContext {
 	private final Session session;
 	private final Node node;
 	private final ZooClassDef def;
-	private final DataEvictor evictor;
+	//lazy init because of late ClassDef-JavaClass binding
+	private DataEvictor evictor;
 	private final DataIndexUpdater updater;
     private final DataSink dataSink;
     private final DataDeleteSink dataDeleteSink;
@@ -73,11 +74,8 @@ public final class PCContext {
 		this.node = node;
 		//only for non-schema classes
 		if (def != null) {
-			this.evictor = new DataEvictor(def, 
-					session.getPersistenceManagerFactory().getEvictPrimitives());
 			this.updater = new DataIndexUpdater(def);
 		} else {
-			this.evictor = null;
 			this.updater = null;
 		}
         //==null for schema bootstrapping   TODO why?
@@ -103,6 +101,10 @@ public final class PCContext {
 	}
 	
 	public final DataEvictor getEvictor() {
+		if (evictor == null) {
+			this.evictor = new DataEvictor(def, 
+					session.getPersistenceManagerFactory().getEvictPrimitives());
+		}
 		return evictor;
 	}
 
@@ -156,11 +158,14 @@ public final class PCContext {
 	}
 
 	public void notifyEvent(ZooPCImpl src, ZooInstanceEvent event) {
+		if (src.getClass() == ZooClassDef.class) {
+			//Ignore this for system objects, even if the listeners are stored in a system objects
+			return;
+		}
 		if (def.getSuperDef() != null) {
 			def.getSuperDef().getProvidedContext().notifyEvent(src, event);
 		}
-		if (listeners == null || src.getClass() == ZooClassDef.class) {
-			//Ignore this for system objects, even if the listeners are stored in a system objects
+		if (listeners == null) {
 			return;
 		}
 		//TODO this is a bit dirty, move classes into enum?
