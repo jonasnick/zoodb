@@ -463,6 +463,7 @@ public class ZooClassDef extends ZooPCImpl {
 
 	public ZooClassProxy getVersionProxy() {
 		if (versionProxy == null) {
+			System.out.println("Creating proxt: " + className);
 			versionProxy = new ZooClassProxy(this, providedContext.getSession());
 		}
 		return versionProxy;
