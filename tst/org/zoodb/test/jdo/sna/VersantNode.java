@@ -13,7 +13,7 @@ package org.zoodb.test.jdo.sna;
 import java.util.List;
 import java.util.Map;
 
-import org.zoodb.api.impl.ZooPC;
+import org.zoodb.api.impl.ZooPCImpl;
 
 /**
  * A node of a graph.
@@ -22,7 +22,7 @@ import org.zoodb.api.impl.ZooPC;
  * @author Darijan Jankovic &lt;jdarijan@student.ethz.ch&gt;
  * @version 1.0
  */
-public class VersantNode extends ZooPC {
+public class VersantNode extends ZooPCImpl {
 
    /**
     * An index of this node.

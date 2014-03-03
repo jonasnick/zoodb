@@ -19,10 +19,10 @@ MA  02111-1307, USA. */
 
 package org.zoodb.test.jdo.pole;
 
-import org.zoodb.api.impl.ZooPC;
+import org.zoodb.api.impl.ZooPCImpl;
 
 
-public class InheritanceHierarchy0 extends ZooPC {
+public class InheritanceHierarchy0 extends ZooPCImpl {
     
     private int i0;
     

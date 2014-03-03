@@ -21,7 +21,8 @@
 package org.zoodb.test.jdo;
 
 import org.junit.Assert;
-import org.zoodb.api.impl.ZooPC;
+
+import org.zoodb.api.impl.ZooPCImpl;
 import org.zoodb.jdo.spi.PersistenceCapableImpl;
 
 @SuppressWarnings("unused")

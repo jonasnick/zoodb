@@ -26,13 +26,13 @@ import java.util.Random;
 
 import javax.jdo.spi.PersistenceCapable;
 
-import org.zoodb.api.impl.ZooPC;
+import org.zoodb.api.impl.ZooPCImpl;
 
 
 public class PerfNativeCall {
 
 	private final Class<?>[] CLASSES = {
-			Long.TYPE, String.class, Date.class, Integer.class, ZooPC.class, 
+			Long.TYPE, String.class, Date.class, Integer.class, ZooPCImpl.class, 
 			PersistenceCapable.class, Byte.class, Byte.TYPE, Integer.TYPE, Class.class};
 
 	private enum PRIMITIVE {

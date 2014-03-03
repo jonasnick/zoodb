@@ -20,9 +20,9 @@
  */
 package org.zoodb.jdo.ex2;
 
-import org.zoodb.api.impl.ZooPC;
+import org.zoodb.api.impl.ZooPCImpl;
 
-public abstract class Person extends ZooPC {
+public abstract class Person extends ZooPCImpl {
 
 	private String name;
 	

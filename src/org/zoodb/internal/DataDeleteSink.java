@@ -20,7 +20,7 @@
  */
 package org.zoodb.internal;
 
-import org.zoodb.api.impl.ZooPC;
+import org.zoodb.api.impl.ZooPCImpl;
 
 /**
  * A data sink serializes objects of a given class. It can be backed either by a file- or
@@ -33,7 +33,7 @@ import org.zoodb.api.impl.ZooPC;
  */
 public interface DataDeleteSink {
 
-    public abstract void delete(ZooPC obj);
+    public abstract void delete(ZooPCImpl obj);
 
     public abstract void deleteGeneric(GenericObject obj);
 

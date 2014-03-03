@@ -25,14 +25,14 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.zoodb.api.impl.ZooPC;
+import org.zoodb.api.impl.ZooPCImpl;
 
 /**
  * Simple example for a persistent class.
  * 
  * @author ztilmann
  */
-public class Person extends ZooPC {
+public class Person extends ZooPCImpl {
 
     private String name;
     private Set<Person> friends = new HashSet<>();

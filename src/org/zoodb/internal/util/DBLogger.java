@@ -24,7 +24,7 @@ import java.lang.reflect.Constructor;
 import java.util.logging.Logger;
 
 import org.zoodb.api.ZooException;
-import org.zoodb.api.impl.ZooPC;
+import org.zoodb.api.impl.ZooPCImpl;
 
 public class DBLogger {
 
@@ -137,7 +137,7 @@ public class DBLogger {
     	return newEx(USER_EXCEPTION, msg, t);
     }
 
-	public static RuntimeException newUser(String msg, ZooPC obj) {
+	public static RuntimeException newUser(String msg, ZooPCImpl obj) {
     	if (isJDO) {
     		//throw new JDOUserException(msg, obj);
     		return newEx(USER_EXCEPTION, msg, null, obj);

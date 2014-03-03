@@ -28,9 +28,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.zoodb.api.impl.ZooPC;
+import org.zoodb.api.impl.ZooPCImpl;
 
-public class ListHolder extends ZooPC implements CheckSummable {
+public class ListHolder extends ZooPCImpl implements CheckSummable {
 	
 	interface Procedure<T> {
 		

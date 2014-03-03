@@ -22,7 +22,7 @@ package org.zoodb.internal.server.index;
 
 import java.util.NoSuchElementException;
 
-import org.zoodb.api.impl.ZooPC;
+import org.zoodb.api.impl.ZooPCImpl;
 import org.zoodb.internal.DataDeSerializer;
 import org.zoodb.internal.client.AbstractCache;
 import org.zoodb.internal.server.DiskAccessOneFile;
@@ -41,14 +41,14 @@ import org.zoodb.internal.util.CloseableIterator;
  * 
  * @author Tilmann Zaeschke
  */
-public class ObjectIterator implements CloseableIterator<ZooPC> {
+public class ObjectIterator implements CloseableIterator<ZooPCImpl> {
 
 	private final LLIterator iter;  
 	private final DiskAccessOneFile file;
 	private final DataDeSerializer deSer;
 	private final boolean loadFromCache;
 	private final AbstractCache cache;
-	private ZooPC pc = null;
+	private ZooPCImpl pc = null;
 	
 	/**
 	 * Object iterator.
@@ -81,11 +81,11 @@ public class ObjectIterator implements CloseableIterator<ZooPC> {
 	}
 
 	@Override
-	public ZooPC next() {
+	public ZooPCImpl next() {
 		if (!hasNext()) {
 			throw new NoSuchElementException();
 		}
-		ZooPC ret = pc;
+		ZooPCImpl ret = pc;
 		findNext();
 		return ret;
 	}
@@ -97,7 +97,7 @@ public class ObjectIterator implements CloseableIterator<ZooPC> {
 			//try loading from cache first
 			if (loadFromCache) {
 	            long oid = e.getValue();
-	            ZooPC co = cache.findCoByOID(oid);
+	            ZooPCImpl co = cache.findCoByOID(oid);
 	            if (co != null && !co.jdoZooIsStateHollow()) {
 	                if (co.jdoZooIsDeleted()) {
 	                    continue;

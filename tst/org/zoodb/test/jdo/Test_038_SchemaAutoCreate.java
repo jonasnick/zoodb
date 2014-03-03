@@ -40,7 +40,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.zoodb.api.impl.ZooPC;
+import org.zoodb.api.impl.ZooPCImpl;
 import org.zoodb.jdo.ZooJdoHelper;
 import org.zoodb.jdo.ZooJdoProperties;
 import org.zoodb.schema.ZooClass;
@@ -299,11 +299,11 @@ public class Test_038_SchemaAutoCreate {
         TestTools.closePM();
     }        
 
-    private class InnerClass extends ZooPC {
+    private class InnerClass extends ZooPCImpl {
         //
     }
 
-    private static class StaticInnerClass extends ZooPC {
+    private static class StaticInnerClass extends ZooPCImpl {
         //
     }
 
@@ -330,14 +330,14 @@ public class Test_038_SchemaAutoCreate {
 
         //anonymous class
         try {
-        	pm.makePersistent(new ZooPC() {});
+        	pm.makePersistent(new ZooPCImpl() {});
             fail();
         } catch (JDOUserException e) {
             //should fail
         }
 
         //local class
-        class LocalClass extends ZooPC {};
+        class LocalClass extends ZooPCImpl {};
         try {
         	pm.makePersistent(new LocalClass());
             fail();

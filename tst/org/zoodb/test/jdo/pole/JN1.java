@@ -19,12 +19,12 @@ MA  02111-1307, USA. */
 
 package org.zoodb.test.jdo.pole;
 
-import org.zoodb.api.impl.ZooPC;
+import org.zoodb.api.impl.ZooPCImpl;
 
 /**
  * @author Christian Ernst
  */
-public class JN1 extends ZooPC {
+public class JN1 extends ZooPCImpl {
 
     public String s0;
     

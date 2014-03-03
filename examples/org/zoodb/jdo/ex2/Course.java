@@ -23,9 +23,9 @@ package org.zoodb.jdo.ex2;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.zoodb.api.impl.ZooPC;
+import org.zoodb.api.impl.ZooPCImpl;
 
-public class Course extends ZooPC {
+public class Course extends ZooPCImpl {
 
 	private String name;
 

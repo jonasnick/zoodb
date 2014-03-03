@@ -40,7 +40,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.zoodb.api.DBLargeVector;
-import org.zoodb.api.impl.ZooPC;
+import org.zoodb.api.impl.ZooPCImpl;
 import org.zoodb.jdo.ZooJdoHelper;
 import org.zoodb.schema.ZooClass;
 import org.zoodb.test.api.TestSerializer;
@@ -289,11 +289,11 @@ public class Test_030_Schema {
         TestTools.closePM();
     }        
 
-    private class InnerClass extends ZooPC {
+    private class InnerClass extends ZooPCImpl {
         //
     }
 
-    private static class StaticInnerClass extends ZooPC {
+    private static class StaticInnerClass extends ZooPCImpl {
         //
     }
 
@@ -319,7 +319,7 @@ public class Test_030_Schema {
         }
 
         //anonymous class
-        Object anon = new ZooPC() {}; 
+        Object anon = new ZooPCImpl() {}; 
         try {
             ZooJdoHelper.schema(pm).addClass(anon.getClass());
             fail();
@@ -328,7 +328,7 @@ public class Test_030_Schema {
         }
 
         //local class
-        class LocalClass extends ZooPC {};
+        class LocalClass extends ZooPCImpl {};
         try {
             ZooJdoHelper.schema(pm).addClass(LocalClass.class);
             fail();

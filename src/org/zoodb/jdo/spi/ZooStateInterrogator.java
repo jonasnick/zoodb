@@ -23,12 +23,12 @@ package org.zoodb.jdo.spi;
 import javax.jdo.PersistenceManager;
 import javax.jdo.spi.StateInterrogation;
 
-import org.zoodb.api.impl.ZooPC;
+import org.zoodb.api.impl.ZooPCImpl;
 
 
 /**
  * StateInterrogator for JDO.
- * This is only used when the persistent classes implement ZooPC directly instead of 
+ * This is only used when the persistent classes implement ZooPCImpl directly instead of 
  * PersistenceCapableImpl. This interrogator is then used when calling e.g. JDOHelper.isDirty().
  * 
  * 
@@ -38,7 +38,7 @@ import org.zoodb.api.impl.ZooPC;
 public class ZooStateInterrogator implements StateInterrogation {
 
 	private boolean checkZPC(Object pc) {
-		return pc instanceof ZooPC;
+		return pc instanceof ZooPCImpl;
 	}
 	
 	@Override
@@ -46,7 +46,7 @@ public class ZooStateInterrogator implements StateInterrogation {
 		if (!checkZPC(pc)) {
 			return null;
 		}
-		return ((ZooPC)pc).jdoZooIsPersistent();
+		return ((ZooPCImpl)pc).jdoZooIsPersistent();
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class ZooStateInterrogator implements StateInterrogation {
 		if (!checkZPC(pc)) {
 			return null;
 		}
-		return ((ZooPC)pc).jdoZooIsTransactional();
+		return ((ZooPCImpl)pc).jdoZooIsTransactional();
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class ZooStateInterrogator implements StateInterrogation {
 		if (!checkZPC(pc)) {
 			return null;
 		}
-		return ((ZooPC)pc).jdoZooIsDirty();
+		return ((ZooPCImpl)pc).jdoZooIsDirty();
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class ZooStateInterrogator implements StateInterrogation {
 		if (!checkZPC(pc)) {
 			return null;
 		}
-		return ((ZooPC)pc).jdoZooIsNew();
+		return ((ZooPCImpl)pc).jdoZooIsNew();
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class ZooStateInterrogator implements StateInterrogation {
 		if (!checkZPC(pc)) {
 			return null;
 		}
-		return ((ZooPC)pc).jdoZooIsDeleted();
+		return ((ZooPCImpl)pc).jdoZooIsDeleted();
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class ZooStateInterrogator implements StateInterrogation {
 		if (!checkZPC(pc)) {
 			return null;
 		}
-		ZooPC zpc = (ZooPC) pc;
+		ZooPCImpl zpc = (ZooPCImpl) pc;
 		return (PersistenceManager) zpc.jdoZooGetContext().getSession().getExternalSession();
 	}
 
@@ -101,7 +101,7 @@ public class ZooStateInterrogator implements StateInterrogation {
 		if (!checkZPC(pc)) {
 			return null;
 		}
-		return ((ZooPC)pc).jdoZooGetOid();
+		return ((ZooPCImpl)pc).jdoZooGetOid();
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class ZooStateInterrogator implements StateInterrogation {
 		if (!checkZPC(pc)) {
 			return null;
 		}
-		return ((ZooPC)pc).jdoZooGetOid();
+		return ((ZooPCImpl)pc).jdoZooGetOid();
 	}
 
 	@Override
@@ -123,7 +123,7 @@ public class ZooStateInterrogator implements StateInterrogation {
 		if (!checkZPC(pc)) {
 			return false;
 		}
-		((ZooPC)pc).jdoZooMarkDirty();
+		((ZooPCImpl)pc).jdoZooMarkDirty();
 		return true;
 	}
 
