@@ -9,10 +9,10 @@ dev.off()
 
 
 png(filename="regularQueryTime.png")
-print(ggplot(data=data, aes(x=numElements, y=regularQuery, colour="blue"))+xlim(0,5000) + geom_line() + geom_point()+ylab("time (ms)"))
+print(ggplot(data=data, aes(x=numElements, y=regularQuery))+xlim(0,5000) + geom_line() + geom_point()+ylab("regular query time (ms)"))
 dev.off()
 png(filename="indexedQueryTime.png")
-print(ggplot(data=data, aes(x=numElements, y=indexedQuery, colour="blue")) + geom_line() + geom_point()+ylab("time (ms)"))
+print(ggplot(data=data, aes(x=numElements, y=indexedQuery)) + geom_line() + geom_point()+ylab("indexed query time (ms)"))
 dev.off()
 
 #for plotting
